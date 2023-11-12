@@ -34,4 +34,3 @@ _start:
   mov rax, 60 ; sys_exit
   xor rdi, rdi ; exit code
   syscall
-
