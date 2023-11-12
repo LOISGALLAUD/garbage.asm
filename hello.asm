@@ -14,6 +14,10 @@ _start:
   syscall
 
   ; exit
+  jmp exit
+
+exit:
+  ; exit
   mov rax, 60        ; syscall number
   xor rdi, rdi       ; exit code
   syscall
