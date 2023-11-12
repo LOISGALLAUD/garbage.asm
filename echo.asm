@@ -1,17 +1,14 @@
 section .data
-    newline db 0xA  ; caractère de nouvelle ligne
+    newline db 0xA  ; newline character
 
 section .text
     global _start
 
 _start:
-    ; argc (nombre d'arguments)
-    mov rdi, [rsp + 8]
+    mov rdi, [rsp + 8] ; argc
+    mov rsi, [rsp + 16] ; argv
 
-    ; argv (pointeur vers le tableau d'arguments)
-    mov rsi, [rsp + 16]
-
-    ; vérifier si au moins un argument est passé
+    ; check if there is at least one argument
     cmp rdi, 1
     jle no_argument
 
@@ -20,23 +17,19 @@ _start:
 
     ; longueur du premier argument
     mov rcx, 0
+
 find_length:
     cmp byte [rdx + rcx], 0
     je found_length
     inc rcx
     jmp find_length
+
 found_length:
-
-    ; syscall number for sys_write
+    ; write to stdout the first argument
     mov rax, 1
-
-    ; file descriptor for stdout
     mov rdi, 1
-
-    ; pointer to the message
+    mov rsi, rdx
     mov rdx, rcx
-
-    ; invoke syscall
     syscall
 
     ; newline
@@ -47,12 +40,6 @@ found_length:
     syscall
 
 no_argument:
-    ; syscall number for sys_exit
     mov rax, 60
-
-    ; exit code 0
     xor rdi, rdi
-
-    ; invoke syscall
     syscall
-
